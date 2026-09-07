@@ -118,8 +118,8 @@
           "🎉 P2P Data Channel が確立（開通）しました！ Channel: " +
             channel.label,
         );
-        document.getElementById("msgInput").disabled = false;
-        document.getElementById("sendBtn").disabled = false;
+        document.getElementById("input").disabled = false;
+        document.getElementById("send").disabled = false;
       };
       dataChannel.onmessage = (event) => {
         console.log("📩 受信データ: " + event.data);
