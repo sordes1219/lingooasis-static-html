@@ -12,6 +12,9 @@
 
   let dataChannel;
 
+  let params = new URLSearchParams(window.location.search);
+  let roomCode = params.get("room");
+
   function updateKeyboardInset() {
     if (!window.visualViewport) return;
     const shouldStickToBottom = isNearBottom();
@@ -138,7 +141,7 @@
     };
 
     // Supabaseのシグナリング部屋
-    const channel = supabaseClient.channel("webrtc-test-room");
+    const channel = supabaseClient.channel(roomCode);
 
     // Supabaseのシグナリングイベントを処理するリスナーを設定
     channel
