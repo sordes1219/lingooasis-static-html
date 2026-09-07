@@ -1,0 +1,1 @@
+# lingooasis-static-html
