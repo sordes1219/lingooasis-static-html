@@ -10,6 +10,8 @@
   const reconnectButtonEl = document.getElementById("reconnect");
   const sendButtonEl = document.getElementById("send");
 
+  let dataChannel;
+
   function updateKeyboardInset() {
     if (!window.visualViewport) return;
     const shouldStickToBottom = isNearBottom();
@@ -107,8 +109,6 @@
       iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
     });
     console.log("✅ WebRTCオブジェクトを作成しました");
-
-    let dataChannel;
 
     // データチャンネルが確立したときの共通処理
     function setupDataChannel(channel) {
