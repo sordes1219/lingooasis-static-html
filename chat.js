@@ -213,7 +213,15 @@
     e.preventDefault();
     const text = inputEl.value.trim();
     if (dataChannel && dataChannel.readyState === "open") {
-      dataChannel.send(text);
+      dataChannel.send(
+        JSON.stringify({
+          type: "chat",
+          direction: "guest-to-host",
+          text: text,
+          original: text,
+          timestamp: Date.now(),
+        }),
+      );
       console.log("📤 送信メッセージ: " + text);
       inputEl.value = "";
     } else {
