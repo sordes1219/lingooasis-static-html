@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>LingoOasis</title>
+    <style>
+      :root {
+        --keyboard-bottom-inset: 0px;
+        --form-height: 72px;
+        --viewport-height: 100dvh;
+        --sky: #38bdf8;
+        --mint: #34d399;
+        --mint-dark: #10b981;
+        --background: #ecfeff;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --muted: #64748b;
+        --border: #bae6fd;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        height: 100%;
+        overflow: hidden;
+        overscroll-behavior: none;
+      }
+      body {
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        min-height: -webkit-fill-available;
+        overflow: hidden;
+        overscroll-behavior: none;
+        background: var(--background);
+        font-family: -apple-system, sans-serif;
+      }
+      #welcome {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 16px;
+        padding: 28px;
+        background: linear-gradient(
+          160deg,
+          #ecfeff 0%,
+          #f0fdfa 55%,
+          #ffffff 100%
+        );
+      }
+      #welcome[hidden],
+      #chat[hidden] {
+        display: none;
+      }
+      .brand-logo {
+        width: 78px;
+        height: 78px;
+        align-self: center;
+        filter: drop-shadow(0 16px 18px rgba(15, 23, 42, 0.14));
+      }
+      .welcome-title {
+        text-align: center;
+        font-size: 34px;
+        font-weight: 800;
+        color: var(--text);
+      }
+      .welcome-copy {
+        text-align: center;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.5;
+      }
+      .safety-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 10px 0;
+      }
+      .safety-item {
+        padding: 14px 16px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.86);
+        color: var(--text);
+        font-size: 17px;
+        font-weight: 700;
+      }
+      #start {
+        width: 100%;
+        border: none;
+        border-radius: 999px;
+        padding: 16px 20px;
+        background: var(--mint);
+        color: white;
+        font-size: 18px;
+        font-weight: 800;
+        box-shadow: 0 12px 28px rgba(16, 185, 129, 0.28);
+      }
+      #status {
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 700;
+      }
+      #messages {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: calc(var(--viewport-height) - var(--form-height));
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: none;
+        touch-action: pan-y;
+      }
+      /* 内枠にFlexと余白を移動 */
+      .message-inner {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px;
+      }
+      .bubble {
+        max-width: 75%;
+        padding: 11px 14px;
+        border-radius: 18px;
+        line-height: 1.4;
+        word-break: break-word;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      }
+      .bubble-main {
+        font-size: 17px;
+        font-weight: 700;
+      }
+      .bubble-sub {
+        margin-top: 4px;
+        font-size: 12px;
+        opacity: 0.72;
+      }
+      .sent {
+        background: var(--mint);
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 4px;
+      }
+      .received {
+        background: var(--surface);
+        color: var(--text);
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+        border: 1px solid var(--border);
+      }
+      #form {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: var(--keyboard-bottom-inset);
+        display: flex;
+        flex-direction: column;
+        padding: 8px;
+        padding-bottom: calc(8px + env(safe-area-inset-bottom));
+        gap: 8px;
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        transform: translateZ(0);
+      }
+      #connection-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        min-height: 36px;
+      }
+      .input-row {
+        display: flex;
+        gap: 8px;
+      }
+      #reconnect {
+        border: 1px solid var(--mint-dark);
+        border-radius: 999px;
+        padding: 7px 12px;
+        background: var(--surface);
+        color: var(--mint-dark);
+        font-weight: 800;
+      }
+      #input {
+        flex: 1;
+        padding: 10px 14px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        font-size: 16px;
+        outline: none;
+        color: var(--text);
+      }
+      #send {
+        padding: 10px 18px;
+        background: var(--mint);
+        color: white;
+        border: none;
+        border-radius: 999px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      #input:disabled,
+      #send:disabled {
+        opacity: 0.55;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <div id="welcome">
+      <svg
+        class="brand-logo"
+        aria-label="LingoOasis logo"
+        viewBox="0 0 96 96"
+        role="img"
+      >
+        <defs>
+          <linearGradient id="logo-gradient" x1="18" y1="10" x2="80" y2="86">
+            <stop offset="0" stop-color="#38bdf8" />
+            <stop offset="1" stop-color="#34d399" />
+          </linearGradient>
+        </defs>
+        <path
+          fill="url(#logo-gradient)"
+          d="M48 6C30 24 18 38 18 56c0 20 15 34 35 34h25c-5-6-7-11-7-17 5-5 7-11 7-18C78 32 63 19 48 6Z"
+        />
+        <path
+          fill="#fff"
+          opacity=".92"
+          d="M34 47h29a5 5 0 0 1 0 10H48l-10 9v-9h-4a5 5 0 0 1 0-10Z"
+        />
+      </svg>
+      <div class="welcome-title">LingoOasis</div>
+      <div class="welcome-copy">
+        Talk face to face with local translation over nearby Wi-Fi.
+      </div>
+      <div class="safety-list">
+        <div class="safety-item">No App Required</div>
+        <div class="safety-item">No Internet Needed</div>
+        <div class="safety-item">100% Safe & Private</div>
+      </div>
+      <button id="start" type="button">Start Chat</button>
+    </div>
+    <div id="chat" hidden>
+      <div id="messages">
+        <div id="message-inner" class="message-inner"></div>
+      </div>
+      <form id="form">
+        <div id="connection-bar">
+          <span id="status">接続中...</span>
+          <button id="reconnect" type="button">再接続</button>
+        </div>
+        <div class="input-row">
+          <input
+            id="input"
+            type="text"
+            placeholder="Type a message..."
+            autocomplete="off"
+            disabled
+          />
+          <button id="send" type="submit" disabled>Send</button>
+        </div>
+      </form>
+    </div>
+    <script src="chat.js"></script>
+  </body>
+</html>
