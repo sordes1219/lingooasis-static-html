@@ -145,23 +145,11 @@
     console.log("📡 シグナリング部屋に接続しました: " + roomCode);
 
     // Supabaseのシグナリングイベントを処理するリスナーを設定
+    // 注: ゲストは常にOffer側（Offerer）であり、Answerを送ることはないため、
+    // 自分自身が送信した"sdp-offer"を受信し得るハンドラは不要かつ危険（自己エコーにより
+    // 誤った状態でsetRemoteDescriptionを呼んでしまう原因になる）。
+    // そのため"sdp-offer"の購読は意図的に行わない。
     channel
-      .on("broadcast", { event: "sdp-offer" }, async ({ payload }) => {
-        console.log(
-          "📩 SDP Offer（接続要求）を受信しました。Answerを返します...",
-        );
-        await peerConnection.setRemoteDescription(
-          new RTCSessionDescription(payload.sdp),
-        );
-        const answer = await peerConnection.createAnswer();
-        await peerConnection.setLocalDescription(answer);
-
-        channel.send({
-          type: "broadcast",
-          event: "sdp-answer",
-          payload: { sdp: answer },
-        });
-      })
       .on("broadcast", { event: "sdp-answer" }, async ({ payload }) => {
         console.log("📩 SDP Answer（承認）を受信しました");
         await peerConnection.setRemoteDescription(
