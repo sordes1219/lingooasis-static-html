@@ -131,7 +131,8 @@
       };
       dataChannel.onmessage = (event) => {
         console.log("📩 受信データ: " + event.data);
-        appendMessage(event.data.text, "received", event.data.original);
+        const data = JSON.parse(event.data);
+        appendMessage(data.text, "received", data.original);
       };
     }
 
