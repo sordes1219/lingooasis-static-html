@@ -95,8 +95,7 @@
     chatEl.hidden = false;
     updateLayoutHeights();
     updateKeyboardInset();
-    // connectWebSocket();
-    // connectWebRtc();
+    connectWebRtc();
   }
 
   function connectWebRtc() {
@@ -165,9 +164,20 @@
       })
       .subscribe((status) => {
         if (status === "SUBSCRIBED") {
-          document.getElementById("status").innerText =
-            "📡 Supabaseシグナリング部屋に入室完了！";
+          setConnectionState("connected", "📡 Connected to the host!");
           console.log("📡 シグナリング準備完了");
+        } else if (status === "ERROR" || status === "CHANNEL_ERROR") {
+          setConnectionState(
+            "disconnected",
+            "⚠️ Failed to connect to the host! Please try again.",
+          );
+          console.log("⚠️ シグナリング部屋への接続に失敗しました");
+        } else if (status === "TIMED_OUT") {
+          setConnectionState(
+            "disconnected",
+            "⚠️ Connection to the host timed out. Please try again.",
+          );
+          console.log("⚠️ シグナリング部屋への接続がタイムアウトしました");
         }
       });
 
