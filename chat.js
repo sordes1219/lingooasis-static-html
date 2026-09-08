@@ -120,8 +120,14 @@
           "🎉 P2P Data Channel が確立（開通）しました！ Channel: " +
             channel.label,
         );
-        document.getElementById("input").disabled = false;
-        document.getElementById("send").disabled = false;
+        setConnectionState("connected", "📡 Connected to the host!");
+      };
+      dataChannel.onclose = () => {
+        console.log("🔌 データチャンネルが切断されました");
+        setConnectionState(
+          "disconnected",
+          "⚠️ Disconnected from the host. Please try again.",
+        );
       };
       dataChannel.onmessage = (event) => {
         console.log("📩 受信データ: " + event.data);
@@ -163,8 +169,11 @@
         }
       })
       .subscribe((status) => {
+        // 注: これはSupabase Realtime（シグナリング用WebSocket）自体の接続状態であり、
+        // ホストとのWebRTC P2P接続の状態ではない。そのため"connected"扱いにはせず、
+        // 失敗・タイムアウト時のみUIに反映する。P2P接続状態はpeerConnectionの
+        // connectionstatechangeで監視する。
         if (status === "SUBSCRIBED") {
-          setConnectionState("connected", "📡 Connected to the host!");
           console.log("📡 シグナリング準備完了");
         } else if (status === "ERROR" || status === "CHANNEL_ERROR") {
           setConnectionState(
@@ -189,6 +198,26 @@
           event: "ice-candidate",
           payload: { candidate: event.candidate },
         });
+      }
+    };
+
+    // WebRTC P2P接続自体の状態変化を監視する。
+    // ホストがアプリを閉じる／ネットワークを切るなどした場合、Supabaseの
+    // シグナリング購読状態は変化しないため、ここでホスト切断を検知する。
+    peerConnection.onconnectionstatechange = () => {
+      console.log(
+        "🔄 PeerConnectionの状態が変化しました: " +
+          peerConnection.connectionState,
+      );
+      if (
+        peerConnection.connectionState === "disconnected" ||
+        peerConnection.connectionState === "failed" ||
+        peerConnection.connectionState === "closed"
+      ) {
+        setConnectionState(
+          "disconnected",
+          "⚠️ Disconnected from the host. Please try again.",
+        );
       }
     };
 
