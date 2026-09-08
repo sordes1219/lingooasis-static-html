@@ -11,6 +11,31 @@
   const sendButtonEl = document.getElementById("send");
 
   let dataChannel;
+  let currentPeerConnection = null;
+  let currentSupabaseClient = null;
+  let currentChannel = null;
+
+  // ゲストが「reconnect」ボタンを押して再接続する場合、以前のPeerConnectionや
+  // Supabaseのシグナリング購読を片付けずに新しい接続を作ると、古い購読が同じ
+  // roomCodeチャンネル上のsdp-answer/ice-candidateを引き続き受信してしまい、
+  // 新しいPeerConnectionのネゴシエーションを妨害する（結果としてゲスト側だけ
+  // データチャンネルが開かず送信できなくなる）。そのため、新しい接続を作る前に
+  // 必ず古い接続を破棄する。
+  function cleanupConnection() {
+    if (currentPeerConnection) {
+      currentPeerConnection.onicecandidate = null;
+      currentPeerConnection.ondatachannel = null;
+      currentPeerConnection.onconnectionstatechange = null;
+      currentPeerConnection.close();
+      currentPeerConnection = null;
+    }
+    if (currentSupabaseClient && currentChannel) {
+      currentSupabaseClient.removeChannel(currentChannel);
+    }
+    currentSupabaseClient = null;
+    currentChannel = null;
+    dataChannel = null;
+  }
 
   let params = new URLSearchParams(window.location.search);
   let roomCode = params.get("room");
@@ -99,17 +124,22 @@
   }
 
   function connectWebRtc() {
+    // 前回の接続が残っている場合は必ず破棄してから新しい接続を作る
+    cleanupConnection();
+
     // WebRTC connection logic will go here
     // Supabase client configuration
     const SUPABASE_URL = "https://kicccaxfxgkpdsmgxdox.supabase.co";
     const SUPABASE_KEY =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpY2NjYXhmeGdrcGRzbWd4ZG94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0NDI2NTUsImV4cCI6MjEwNDAxODY1NX0.5s5bXuPpZPMTy1qc4DaYuwWy_EiwzIcTbFLcIMgA6Gk";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    currentSupabaseClient = supabaseClient;
 
     // WebRTC PeerConnection の作成
     const peerConnection = new RTCPeerConnection({
       iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
     });
+    currentPeerConnection = peerConnection;
     console.log("✅ WebRTCオブジェクトを作成しました");
 
     // データチャンネルが確立したときの共通処理
@@ -128,19 +158,7 @@
           "remote-disconnected",
           "❌ Disconnected from the host. Please read qr-code again.",
         );
-        // 注: close()を呼ぶとconnectionStateが"closed"に遷移し
-        // onconnectionstatechangeが発火してしまう。先にnullにしておかないと、
-        // 上で設定した"remote-disconnected"状態（QRコード再読み込みを促す表示）が
-        // "disconnected"状態（reconnectボタン再表示）で上書きされてしまう。
-        peerConnection.onicecandidate = null;
-        peerConnection.ondatachannel = null;
-        peerConnection.onconnectionstatechange = null;
-        peerConnection.close();
-
-        // supabaseClientはconst宣言のため再代入できない（TypeErrorになる）。
-        // ローカル変数なのでnull代入は不要で、removeChannelのみ行えばよい。
-        supabaseClient.removeChannel(channel);
-        dataChannel = null;
+        cleanupConnection();
       };
       dataChannel.onmessage = (event) => {
         console.log("📩 受信データ: " + event.data);
@@ -161,6 +179,7 @@
 
     // Supabaseのシグナリング部屋
     const channel = supabaseClient.channel(roomCode);
+    currentChannel = channel;
     console.log("📡 シグナリング部屋に接続しました: " + roomCode);
 
     // Supabaseのシグナリングイベントを処理するリスナーを設定
