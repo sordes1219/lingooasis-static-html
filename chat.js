@@ -142,6 +142,7 @@
 
     // Supabaseのシグナリング部屋
     const channel = supabaseClient.channel(roomCode);
+    console.log("📡 シグナリング部屋に接続しました: " + roomCode);
 
     // Supabaseのシグナリングイベントを処理するリスナーを設定
     channel
