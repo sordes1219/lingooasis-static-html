@@ -22,6 +22,17 @@
   // データチャンネルが開かず送信できなくなる）。そのため、新しい接続を作る前に
   // 必ず古い接続を破棄する。
   function cleanupConnection() {
+    // 注: peerConnection.close()を呼ぶと、それに紐づくdataChannelの
+    // onclose イベントも発火してしまう。reconnectボタンによる意図的な
+    // 再接続の場合にこれが起きると、古いdataChannel.onclose
+    // （ホスト切断時用）が誤って発火し、"remote-disconnected"状態
+    // （QRコード再読み込みを促す表示）に上書きされてしまうため、
+    // close()より先にdataChannel側のハンドラも必ずnullにしておく。
+    if (dataChannel) {
+      dataChannel.onopen = null;
+      dataChannel.onclose = null;
+      dataChannel.onmessage = null;
+    }
     if (currentPeerConnection) {
       currentPeerConnection.onicecandidate = null;
       currentPeerConnection.ondatachannel = null;
