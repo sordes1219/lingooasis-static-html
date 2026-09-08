@@ -219,6 +219,12 @@
         // connectionstatechangeで監視する。
         if (status === "SUBSCRIBED") {
           console.log("📡 シグナリング準備完了");
+          // 注: channel.send()はWebSocketの購読（SUBSCRIBED）が完了する前に
+          // 呼び出すと、Supabase RealtimeがREST API経由の送信に自動フォール
+          // バックしてしまう（"Realtime send() is automatically falling back
+          // to REST API"という警告が出る）。RESTフォールバックは遅延や失敗の
+          // 原因になり得るため、Offerの送信はSUBSCRIBED確定後にのみ行う。
+          offerRequest();
         } else if (status === "ERROR" || status === "CHANNEL_ERROR") {
           setConnectionState(
             "disconnected",
@@ -278,8 +284,6 @@
         payload: { sdp: offer },
       });
     };
-
-    offerRequest();
   }
 
   startButtonEl.addEventListener("click", startChat);
