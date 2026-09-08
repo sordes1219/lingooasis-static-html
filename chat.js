@@ -125,9 +125,22 @@
       dataChannel.onclose = () => {
         console.log("🔌 データチャンネルが切断されました");
         setConnectionState(
-          "disconnected",
-          "⚠️ Disconnected from the host. Please try again.",
+          "remote-disconnected",
+          "❌ Disconnected from the host. Please read qr-code again.",
         );
+        // 注: close()を呼ぶとconnectionStateが"closed"に遷移し
+        // onconnectionstatechangeが発火してしまう。先にnullにしておかないと、
+        // 上で設定した"remote-disconnected"状態（QRコード再読み込みを促す表示）が
+        // "disconnected"状態（reconnectボタン再表示）で上書きされてしまう。
+        peerConnection.onicecandidate = null;
+        peerConnection.ondatachannel = null;
+        peerConnection.onconnectionstatechange = null;
+        peerConnection.close();
+
+        // supabaseClientはconst宣言のため再代入できない（TypeErrorになる）。
+        // ローカル変数なのでnull代入は不要で、removeChannelのみ行えばよい。
+        supabaseClient.removeChannel(channel);
+        dataChannel = null;
       };
       dataChannel.onmessage = (event) => {
         console.log("📩 受信データ: " + event.data);
@@ -179,13 +192,13 @@
         } else if (status === "ERROR" || status === "CHANNEL_ERROR") {
           setConnectionState(
             "disconnected",
-            "⚠️ Failed to connect to the host! Please try again.",
+            "⚠️ Failed to connect to the host! Please reconnect.",
           );
           console.log("⚠️ シグナリング部屋への接続に失敗しました");
         } else if (status === "TIMED_OUT") {
           setConnectionState(
             "disconnected",
-            "⚠️ Connection to the host timed out. Please try again.",
+            "⚠️ Connection to the host timed out. Please reconnect.",
           );
           console.log("⚠️ シグナリング部屋への接続がタイムアウトしました");
         }
@@ -217,7 +230,7 @@
       ) {
         setConnectionState(
           "disconnected",
-          "⚠️ Disconnected from the host. Please try again.",
+          "⚠️ Disconnected from the host. Please reconnect.",
         );
       }
     };
