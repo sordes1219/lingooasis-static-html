@@ -93,6 +93,27 @@
         font-size: 17px;
         font-weight: 700;
       }
+      .lang-label {
+        padding-left: 4px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 800;
+      }
+      #lang-select {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.92);
+        color: var(--text);
+        font-size: 17px;
+        font-weight: 700;
+        font-family: inherit;
+        outline: none;
+        appearance: none;
+        -webkit-appearance: none;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+      }
       #start {
         width: 100%;
         border: none;
@@ -228,6 +249,22 @@
         <div class="safety-item">No Internet Needed</div>
         <div class="safety-item">100% Safe & Private</div>
       </div>
+      <label class="lang-label" for="lang-select">Your language</label>
+      <select id="lang-select">
+        <option value="zh">中文</option>
+        <option value="es">Español</option>
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="pt">Português</option>
+        <option value="ru">Русский</option>
+        <option value="ja">日本語</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="ko">한국어</option>
+        <option value="vi">Tiếng Việt</option>
+        <option value="it">Italiano</option>
+        <option value="th">ไทย</option>
+      </select>
       <button id="start" type="button">Start Chat</button>
     </div>
     <div id="chat" hidden>

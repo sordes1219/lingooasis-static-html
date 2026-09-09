@@ -2,6 +2,7 @@
   const welcomeEl = document.getElementById("welcome");
   const chatEl = document.getElementById("chat");
   const startButtonEl = document.getElementById("start");
+  const langSelectEl = document.getElementById("lang-select");
   const statusEl = document.getElementById("status");
   const messagesEl = document.getElementById("messages");
   const messageInnerEl = document.getElementById("message-inner");
@@ -14,6 +15,21 @@
   let currentPeerConnection = null;
   let currentSupabaseClient = null;
   let currentChannel = null;
+  const SUPPORTED_LANGUAGE_CODES = [
+    "zh",
+    "es",
+    "en",
+    "hi",
+    "pt",
+    "ru",
+    "ja",
+    "fr",
+    "de",
+    "ko",
+    "vi",
+    "it",
+    "th",
+  ];
 
   // ゲストが「reconnect」ボタンを押して再接続する場合、以前のPeerConnectionや
   // Supabaseのシグナリング購読を片付けずに新しい接続を作ると、古い購読が同じ
@@ -50,6 +66,24 @@
 
   let params = new URLSearchParams(window.location.search);
   let roomCode = params.get("room");
+
+  function detectInitialLanguage() {
+    const browserLangs =
+      navigator.languages && navigator.languages.length
+        ? navigator.languages
+        : [navigator.language];
+    for (const raw of browserLangs) {
+      const code = (raw || "").slice(0, 2).toLowerCase();
+      if (SUPPORTED_LANGUAGE_CODES.includes(code)) return code;
+    }
+    return "en";
+  }
+
+  langSelectEl.value = detectInitialLanguage();
+
+  function currentGuestLanguage() {
+    return langSelectEl.value || "en";
+  }
 
   function updateKeyboardInset() {
     if (!window.visualViewport) return;
@@ -127,6 +161,7 @@
   }
 
   function startChat() {
+    langSelectEl.disabled = true;
     welcomeEl.hidden = true;
     chatEl.hidden = false;
     updateLayoutHeights();
@@ -162,6 +197,12 @@
             channel.label,
         );
         setConnectionState("connected", "📡 Connected to the host!");
+        channel.send(
+          JSON.stringify({
+            type: "guest-lang",
+            lang: currentGuestLanguage(),
+          }),
+        );
       };
       dataChannel.onclose = () => {
         console.log("🔌 データチャンネルが切断されました");
