@@ -197,12 +197,20 @@
             channel.label,
         );
         setConnectionState("connected", "📡 Connected to the host!");
-        channel.send(
-          JSON.stringify({
-            type: "guest-lang",
-            lang: currentGuestLanguage(),
-          }),
-        );
+        // データチャンネル開通直後の最初の送信は、ホスト側の受信準備が
+        // 間に合わず取りこぼされることが稀にあるため、少し間を置いて
+        // 保険としてもう一度送信する
+        const sendGuestLang = () => {
+          if (channel.readyState !== "open") return;
+          channel.send(
+            JSON.stringify({
+              type: "guest-lang",
+              lang: currentGuestLanguage(),
+            }),
+          );
+        };
+        sendGuestLang();
+        setTimeout(sendGuestLang, 1000);
       };
       dataChannel.onclose = () => {
         console.log("🔌 データチャンネルが切断されました");
