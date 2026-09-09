@@ -10,6 +10,13 @@
   const formEl = document.getElementById("form");
   const reconnectButtonEl = document.getElementById("reconnect");
   const sendButtonEl = document.getElementById("send");
+  const welcomeCopyEl = document.getElementById("welcome-copy");
+  const safetyItem1El = document.getElementById("safety-item-1");
+  const safetyItem2El = document.getElementById("safety-item-2");
+  const safetyItem3El = document.getElementById("safety-item-3");
+  const langLabelEl = document.getElementById("lang-label");
+  let currentConnectionState = "connecting";
+  let currentStatusMessageKey = "statusConnecting";
 
   let dataChannel;
   let currentPeerConnection = null;
@@ -30,6 +37,224 @@
     "it",
     "th",
   ];
+
+  const GUEST_UI_STRINGS = {
+    zh: {
+      welcomeCopy: "用你自己的语言面对面交流。",
+      safetyItem1: "无需下载App",
+      safetyItem2: "无需注册",
+      safetyItem3: "100%安全私密",
+      yourLanguageLabel: "您的语言",
+      startButton: "开始聊天",
+      inputPlaceholder: "输入消息...",
+      reconnectButton: "重新连接",
+      statusConnecting: "连接中...",
+      statusConnected: "📡 已连接到主机！",
+      statusRemoteDisconnected: "❌ 与主机的连接已断开，请重新扫描二维码。",
+      statusSignalingFailed: "⚠️ 连接主机失败！请重新连接。",
+      statusSignalingTimeout: "⚠️ 连接主机超时。请重新连接。",
+      statusPeerDisconnected: "⚠️ 与主机的连接已断开。请重新连接。",
+    },
+    es: {
+      welcomeCopy: "Habla cara a cara en tu propio idioma.",
+      safetyItem1: "No requiere app",
+      safetyItem2: "No requiere registro",
+      safetyItem3: "100% seguro y privado",
+      yourLanguageLabel: "Tu idioma",
+      startButton: "Iniciar chat",
+      inputPlaceholder: "Escribe un mensaje...",
+      reconnectButton: "Reconectar",
+      statusConnecting: "Conectando...",
+      statusConnected: "📡 ¡Conectado con el anfitrión!",
+      statusRemoteDisconnected: "❌ Desconectado del anfitrión. Vuelve a leer el código QR.",
+      statusSignalingFailed: "⚠️ ¡No se pudo conectar con el anfitrión! Vuelve a conectar.",
+      statusSignalingTimeout: "⚠️ La conexión con el anfitrión ha caducado. Vuelve a conectar.",
+      statusPeerDisconnected: "⚠️ Desconectado del anfitrión. Vuelve a conectar.",
+    },
+    en: {
+      welcomeCopy: "Talk face-to-face in your own language.",
+      safetyItem1: "No App Required",
+      safetyItem2: "No Registration Needed",
+      safetyItem3: "100% Safe & Private",
+      yourLanguageLabel: "Your language",
+      startButton: "Start Chat",
+      inputPlaceholder: "Type a message...",
+      reconnectButton: "Reconnect",
+      statusConnecting: "Connecting...",
+      statusConnected: "📡 Connected to the host!",
+      statusRemoteDisconnected: "❌ Disconnected from the host. Please read qr-code again.",
+      statusSignalingFailed: "⚠️ Failed to connect to the host! Please reconnect.",
+      statusSignalingTimeout: "⚠️ Connection to the host timed out. Please reconnect.",
+      statusPeerDisconnected: "⚠️ Disconnected from the host. Please reconnect.",
+    },
+    hi: {
+      welcomeCopy: "अपनी ही भाषा में आमने-सामने बात करें।",
+      safetyItem1: "कोई ऐप आवश्यक नहीं",
+      safetyItem2: "पंजीकरण की आवश्यकता नहीं",
+      safetyItem3: "100% सुरक्षित और निजी",
+      yourLanguageLabel: "आपकी भाषा",
+      startButton: "चैट शुरू करें",
+      inputPlaceholder: "संदेश लिखें...",
+      reconnectButton: "पुनः कनेक्ट करें",
+      statusConnecting: "कनेक्ट हो रहा है...",
+      statusConnected: "📡 होस्ट से जुड़ गए!",
+      statusRemoteDisconnected: "❌ होस्ट से कनेक्शन टूट गया। कृपया फिर से QR कोड स्कैन करें।",
+      statusSignalingFailed: "⚠️ होस्ट से कनेक्ट नहीं हो सका! कृपया फिर से कनेक्ट करें।",
+      statusSignalingTimeout: "⚠️ होस्ट से कनेक्शन का समय समाप्त हो गया। कृपया फिर से कनेक्ट करें।",
+      statusPeerDisconnected: "⚠️ होस्ट से कनेक्शन टूट गया। कृपया फिर से कनेक्ट करें।",
+    },
+    pt: {
+      welcomeCopy: "Converse cara a cara no seu próprio idioma.",
+      safetyItem1: "Sem necessidade de app",
+      safetyItem2: "Sem necessidade de cadastro",
+      safetyItem3: "100% seguro e privado",
+      yourLanguageLabel: "Seu idioma",
+      startButton: "Iniciar chat",
+      inputPlaceholder: "Digite uma mensagem...",
+      reconnectButton: "Reconectar",
+      statusConnecting: "Conectando...",
+      statusConnected: "📡 Conectado ao anfitrião!",
+      statusRemoteDisconnected: "❌ Desconectado do anfitrião. Leia o código QR novamente.",
+      statusSignalingFailed: "⚠️ Falha ao conectar ao anfitrião! Reconecte-se.",
+      statusSignalingTimeout: "⚠️ A conexão com o anfitrião expirou. Reconecte-se.",
+      statusPeerDisconnected: "⚠️ Desconectado do anfitrião. Reconecte-se.",
+    },
+    ru: {
+      welcomeCopy: "Общайтесь лицом к лицу на своём родном языке.",
+      safetyItem1: "Приложение не требуется",
+      safetyItem2: "Регистрация не требуется",
+      safetyItem3: "100% безопасно и приватно",
+      yourLanguageLabel: "Ваш язык",
+      startButton: "Начать чат",
+      inputPlaceholder: "Введите сообщение...",
+      reconnectButton: "Переподключиться",
+      statusConnecting: "Подключение...",
+      statusConnected: "📡 Подключено к хосту!",
+      statusRemoteDisconnected: "❌ Соединение с хостом разорвано. Отсканируйте QR-код ещё раз.",
+      statusSignalingFailed: "⚠️ Не удалось подключиться к хосту! Переподключитесь.",
+      statusSignalingTimeout: "⚠️ Время ожидания подключения к хосту истекло. Переподключитесь.",
+      statusPeerDisconnected: "⚠️ Соединение с хостом разорвано. Переподключитесь.",
+    },
+    ja: {
+      welcomeCopy: "自分の言語のまま、面と向かって話せます。",
+      safetyItem1: "アプリ不要",
+      safetyItem2: "登録不要",
+      safetyItem3: "100%安全・プライベート",
+      yourLanguageLabel: "あなたの言語",
+      startButton: "チャットを始める",
+      inputPlaceholder: "メッセージを入力...",
+      reconnectButton: "再接続",
+      statusConnecting: "接続中...",
+      statusConnected: "📡 ホストと接続しました！",
+      statusRemoteDisconnected: "❌ ホストとの接続が切れました。もう一度QRコードを読み取ってください。",
+      statusSignalingFailed: "⚠️ ホストへの接続に失敗しました！再接続してください。",
+      statusSignalingTimeout: "⚠️ ホストへの接続がタイムアウトしました。再接続してください。",
+      statusPeerDisconnected: "⚠️ ホストとの接続が切れました。再接続してください。",
+    },
+    fr: {
+      welcomeCopy: "Parlez face à face dans votre propre langue.",
+      safetyItem1: "Aucune application requise",
+      safetyItem2: "Aucune inscription requise",
+      safetyItem3: "100% sûr et privé",
+      yourLanguageLabel: "Votre langue",
+      startButton: "Démarrer le chat",
+      inputPlaceholder: "Écrivez un message...",
+      reconnectButton: "Se reconnecter",
+      statusConnecting: "Connexion...",
+      statusConnected: "📡 Connecté à l'hôte !",
+      statusRemoteDisconnected: "❌ Déconnecté de l'hôte. Veuillez rescanner le code QR.",
+      statusSignalingFailed: "⚠️ Échec de la connexion à l'hôte ! Veuillez vous reconnecter.",
+      statusSignalingTimeout: "⚠️ Le délai de connexion à l'hôte a expiré. Veuillez vous reconnecter.",
+      statusPeerDisconnected: "⚠️ Déconnecté de l'hôte. Veuillez vous reconnecter.",
+    },
+    de: {
+      welcomeCopy: "Sprechen Sie von Angesicht zu Angesicht in Ihrer eigenen Sprache.",
+      safetyItem1: "Keine App erforderlich",
+      safetyItem2: "Keine Registrierung erforderlich",
+      safetyItem3: "100% sicher & privat",
+      yourLanguageLabel: "Ihre Sprache",
+      startButton: "Chat starten",
+      inputPlaceholder: "Nachricht eingeben...",
+      reconnectButton: "Erneut verbinden",
+      statusConnecting: "Verbindung wird hergestellt...",
+      statusConnected: "📡 Mit dem Host verbunden!",
+      statusRemoteDisconnected: "❌ Verbindung zum Host getrennt. Bitte scannen Sie den QR-Code erneut.",
+      statusSignalingFailed: "⚠️ Verbindung zum Host fehlgeschlagen! Bitte erneut verbinden.",
+      statusSignalingTimeout: "⚠️ Zeitüberschreitung bei der Verbindung zum Host. Bitte erneut verbinden.",
+      statusPeerDisconnected: "⚠️ Verbindung zum Host getrennt. Bitte erneut verbinden.",
+    },
+    ko: {
+      welcomeCopy: "자신의 언어 그대로 얼굴을 마주 보고 대화하세요.",
+      safetyItem1: "앱 설치 불필요",
+      safetyItem2: "등록 불필요",
+      safetyItem3: "100% 안전하고 사적임",
+      yourLanguageLabel: "내 언어",
+      startButton: "채팅 시작",
+      inputPlaceholder: "메시지를 입력하세요...",
+      reconnectButton: "다시 연결",
+      statusConnecting: "연결 중...",
+      statusConnected: "📡 호스트와 연결되었습니다!",
+      statusRemoteDisconnected: "❌ 호스트와의 연결이 끊어졌습니다. QR 코드를 다시 스캔해주세요.",
+      statusSignalingFailed: "⚠️ 호스트에 연결하지 못했습니다! 다시 연결해주세요.",
+      statusSignalingTimeout: "⚠️ 호스트 연결 시간이 초과되었습니다. 다시 연결해주세요.",
+      statusPeerDisconnected: "⚠️ 호스트와의 연결이 끊어졌습니다. 다시 연결해주세요.",
+    },
+    vi: {
+      welcomeCopy: "Trò chuyện trực tiếp bằng chính ngôn ngữ của bạn.",
+      safetyItem1: "Không cần cài ứng dụng",
+      safetyItem2: "Không cần đăng ký",
+      safetyItem3: "100% an toàn & riêng tư",
+      yourLanguageLabel: "Ngôn ngữ của bạn",
+      startButton: "Bắt đầu trò chuyện",
+      inputPlaceholder: "Nhập tin nhắn...",
+      reconnectButton: "Kết nối lại",
+      statusConnecting: "Đang kết nối...",
+      statusConnected: "📡 Đã kết nối với máy chủ!",
+      statusRemoteDisconnected: "❌ Đã ngắt kết nối với máy chủ. Vui lòng quét lại mã QR.",
+      statusSignalingFailed: "⚠️ Kết nối với máy chủ thất bại! Vui lòng kết nối lại.",
+      statusSignalingTimeout: "⚠️ Kết nối với máy chủ đã hết thời gian chờ. Vui lòng kết nối lại.",
+      statusPeerDisconnected: "⚠️ Đã ngắt kết nối với máy chủ. Vui lòng kết nối lại.",
+    },
+    it: {
+      welcomeCopy: "Parla faccia a faccia nella tua lingua.",
+      safetyItem1: "Nessuna app richiesta",
+      safetyItem2: "Nessuna registrazione richiesta",
+      safetyItem3: "100% sicuro e privato",
+      yourLanguageLabel: "La tua lingua",
+      startButton: "Inizia chat",
+      inputPlaceholder: "Scrivi un messaggio...",
+      reconnectButton: "Riconnetti",
+      statusConnecting: "Connessione in corso...",
+      statusConnected: "📡 Connesso all'host!",
+      statusRemoteDisconnected: "❌ Disconnesso dall'host. Scansiona di nuovo il codice QR.",
+      statusSignalingFailed: "⚠️ Connessione all'host non riuscita! Riconnettiti.",
+      statusSignalingTimeout: "⚠️ Connessione all'host scaduta. Riconnettiti.",
+      statusPeerDisconnected: "⚠️ Disconnesso dall'host. Riconnettiti.",
+    },
+    th: {
+      welcomeCopy: "พูดคุยแบบเห็นหน้ากันด้วยภาษาของคุณเอง",
+      safetyItem1: "ไม่ต้องติดตั้งแอป",
+      safetyItem2: "ไม่ต้องลงทะเบียน",
+      safetyItem3: "ปลอดภัยและเป็นส่วนตัว 100%",
+      yourLanguageLabel: "ภาษาของคุณ",
+      startButton: "เริ่มแชท",
+      inputPlaceholder: "พิมพ์ข้อความ...",
+      reconnectButton: "เชื่อมต่อใหม่",
+      statusConnecting: "กำลังเชื่อมต่อ...",
+      statusConnected: "📡 เชื่อมต่อกับโฮสต์แล้ว!",
+      statusRemoteDisconnected: "❌ การเชื่อมต่อกับโฮสต์ถูกตัด กรุณาสแกน QR โค้ดอีกครั้ง",
+      statusSignalingFailed: "⚠️ เชื่อมต่อกับโฮสต์ไม่สำเร็จ! กรุณาเชื่อมต่อใหม่",
+      statusSignalingTimeout: "⚠️ การเชื่อมต่อกับโฮสต์หมดเวลา กรุณาเชื่อมต่อใหม่",
+      statusPeerDisconnected: "⚠️ การเชื่อมต่อกับโฮสต์ถูกตัด กรุณาเชื่อมต่อใหม่",
+    },
+  };
+
+  const STATUS_COLORS = {
+    connecting: "#64748b",
+    connected: "#10b981",
+    "remote-disconnected": "#ef4444",
+    disconnected: "#ef4444",
+  };
 
   // ゲストが「reconnect」ボタンを押して再接続する場合、以前のPeerConnectionや
   // Supabaseのシグナリング購読を片付けずに新しい接続を作ると、古い購読が同じ
@@ -79,7 +304,26 @@
     return "en";
   }
 
+  function guestUiStrings() {
+    return GUEST_UI_STRINGS[currentGuestLanguage()] || GUEST_UI_STRINGS.en;
+  }
+
+  function applyGuestUiLanguage() {
+    const t = guestUiStrings();
+    welcomeCopyEl.textContent = t.welcomeCopy;
+    safetyItem1El.textContent = t.safetyItem1;
+    safetyItem2El.textContent = t.safetyItem2;
+    safetyItem3El.textContent = t.safetyItem3;
+    langLabelEl.textContent = t.yourLanguageLabel;
+    startButtonEl.textContent = t.startButton;
+    inputEl.placeholder = t.inputPlaceholder;
+    reconnectButtonEl.textContent = t.reconnectButton;
+    renderConnectionState();
+  }
+
   langSelectEl.value = detectInitialLanguage();
+  applyGuestUiLanguage();
+  langSelectEl.addEventListener("change", applyGuestUiLanguage);
 
   function currentGuestLanguage() {
     return langSelectEl.value || "en";
@@ -125,13 +369,20 @@
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
-  function setConnectionState(state, text, color) {
-    const canSend = state === "connected";
-    statusEl.textContent = text;
-    statusEl.style.color = color;
+  function setConnectionState(state, messageKey) {
+    currentConnectionState = state;
+    currentStatusMessageKey = messageKey;
+    renderConnectionState();
+  }
+
+  function renderConnectionState() {
+    const canSend = currentConnectionState === "connected";
+    const t = guestUiStrings();
+    statusEl.textContent = t[currentStatusMessageKey];
+    statusEl.style.color = STATUS_COLORS[currentConnectionState];
     inputEl.disabled = !canSend;
     sendButtonEl.disabled = !canSend;
-    reconnectButtonEl.hidden = state !== "disconnected";
+    reconnectButtonEl.hidden = currentConnectionState !== "disconnected";
   }
 
   if (window.visualViewport) {
@@ -172,6 +423,7 @@
   function connectWebRtc() {
     // 前回の接続が残っている場合は必ず破棄してから新しい接続を作る
     cleanupConnection();
+    setConnectionState("connecting", "statusConnecting");
 
     // WebRTC connection logic will go here
     // Supabase client configuration
@@ -196,7 +448,7 @@
           "🎉 P2P Data Channel が確立（開通）しました！ Channel: " +
             channel.label,
         );
-        setConnectionState("connected", "📡 Connected to the host!");
+        setConnectionState("connected", "statusConnected");
         // データチャンネル開通直後の最初の送信は、ホスト側の受信準備が
         // 間に合わず取りこぼされることが稀にあるため、少し間を置いて
         // 保険としてもう一度送信する
@@ -214,10 +466,7 @@
       };
       dataChannel.onclose = () => {
         console.log("🔌 データチャンネルが切断されました");
-        setConnectionState(
-          "remote-disconnected",
-          "❌ Disconnected from the host. Please read qr-code again.",
-        );
+        setConnectionState("remote-disconnected", "statusRemoteDisconnected");
         cleanupConnection();
       };
       dataChannel.onmessage = (event) => {
@@ -275,16 +524,10 @@
           // 原因になり得るため、Offerの送信はSUBSCRIBED確定後にのみ行う。
           offerRequest();
         } else if (status === "ERROR" || status === "CHANNEL_ERROR") {
-          setConnectionState(
-            "disconnected",
-            "⚠️ Failed to connect to the host! Please reconnect.",
-          );
+          setConnectionState("disconnected", "statusSignalingFailed");
           console.log("⚠️ シグナリング部屋への接続に失敗しました");
         } else if (status === "TIMED_OUT") {
-          setConnectionState(
-            "disconnected",
-            "⚠️ Connection to the host timed out. Please reconnect.",
-          );
+          setConnectionState("disconnected", "statusSignalingTimeout");
           console.log("⚠️ シグナリング部屋への接続がタイムアウトしました");
         }
       });
@@ -313,10 +556,7 @@
         peerConnection.connectionState === "failed" ||
         peerConnection.connectionState === "closed"
       ) {
-        setConnectionState(
-          "disconnected",
-          "⚠️ Disconnected from the host. Please reconnect.",
-        );
+        setConnectionState("disconnected", "statusPeerDisconnected");
       }
     };
 
