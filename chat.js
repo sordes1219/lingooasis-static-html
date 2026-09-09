@@ -10,7 +10,6 @@
   const formEl = document.getElementById("form");
   const reconnectButtonEl = document.getElementById("reconnect");
   const sendButtonEl = document.getElementById("send");
-  const welcomeCopyEl = document.getElementById("welcome-copy");
   const safetyItem1El = document.getElementById("safety-item-1");
   const safetyItem2El = document.getElementById("safety-item-2");
   const safetyItem3El = document.getElementById("safety-item-3");
@@ -66,10 +65,14 @@
       reconnectButton: "Reconectar",
       statusConnecting: "Conectando...",
       statusConnected: "📡 ¡Conectado con el anfitrión!",
-      statusRemoteDisconnected: "❌ Desconectado del anfitrión. Vuelve a leer el código QR.",
-      statusSignalingFailed: "⚠️ ¡No se pudo conectar con el anfitrión! Vuelve a conectar.",
-      statusSignalingTimeout: "⚠️ La conexión con el anfitrión ha caducado. Vuelve a conectar.",
-      statusPeerDisconnected: "⚠️ Desconectado del anfitrión. Vuelve a conectar.",
+      statusRemoteDisconnected:
+        "❌ Desconectado del anfitrión. Vuelve a leer el código QR.",
+      statusSignalingFailed:
+        "⚠️ ¡No se pudo conectar con el anfitrión! Vuelve a conectar.",
+      statusSignalingTimeout:
+        "⚠️ La conexión con el anfitrión ha caducado. Vuelve a conectar.",
+      statusPeerDisconnected:
+        "⚠️ Desconectado del anfitrión. Vuelve a conectar.",
     },
     en: {
       welcomeCopy: "Talk face-to-face in your own language.",
@@ -82,10 +85,14 @@
       reconnectButton: "Reconnect",
       statusConnecting: "Connecting...",
       statusConnected: "📡 Connected to the host!",
-      statusRemoteDisconnected: "❌ Disconnected from the host. Please read qr-code again.",
-      statusSignalingFailed: "⚠️ Failed to connect to the host! Please reconnect.",
-      statusSignalingTimeout: "⚠️ Connection to the host timed out. Please reconnect.",
-      statusPeerDisconnected: "⚠️ Disconnected from the host. Please reconnect.",
+      statusRemoteDisconnected:
+        "❌ Disconnected from the host. Please read qr-code again.",
+      statusSignalingFailed:
+        "⚠️ Failed to connect to the host! Please reconnect.",
+      statusSignalingTimeout:
+        "⚠️ Connection to the host timed out. Please reconnect.",
+      statusPeerDisconnected:
+        "⚠️ Disconnected from the host. Please reconnect.",
     },
     hi: {
       welcomeCopy: "अपनी ही भाषा में आमने-सामने बात करें।",
@@ -98,10 +105,14 @@
       reconnectButton: "पुनः कनेक्ट करें",
       statusConnecting: "कनेक्ट हो रहा है...",
       statusConnected: "📡 होस्ट से जुड़ गए!",
-      statusRemoteDisconnected: "❌ होस्ट से कनेक्शन टूट गया। कृपया फिर से QR कोड स्कैन करें।",
-      statusSignalingFailed: "⚠️ होस्ट से कनेक्ट नहीं हो सका! कृपया फिर से कनेक्ट करें।",
-      statusSignalingTimeout: "⚠️ होस्ट से कनेक्शन का समय समाप्त हो गया। कृपया फिर से कनेक्ट करें।",
-      statusPeerDisconnected: "⚠️ होस्ट से कनेक्शन टूट गया। कृपया फिर से कनेक्ट करें।",
+      statusRemoteDisconnected:
+        "❌ होस्ट से कनेक्शन टूट गया। कृपया फिर से QR कोड स्कैन करें।",
+      statusSignalingFailed:
+        "⚠️ होस्ट से कनेक्ट नहीं हो सका! कृपया फिर से कनेक्ट करें।",
+      statusSignalingTimeout:
+        "⚠️ होस्ट से कनेक्शन का समय समाप्त हो गया। कृपया फिर से कनेक्ट करें।",
+      statusPeerDisconnected:
+        "⚠️ होस्ट से कनेक्शन टूट गया। कृपया फिर से कनेक्ट करें।",
     },
     pt: {
       welcomeCopy: "Converse cara a cara no seu próprio idioma.",
@@ -114,9 +125,11 @@
       reconnectButton: "Reconectar",
       statusConnecting: "Conectando...",
       statusConnected: "📡 Conectado ao anfitrião!",
-      statusRemoteDisconnected: "❌ Desconectado do anfitrião. Leia o código QR novamente.",
+      statusRemoteDisconnected:
+        "❌ Desconectado do anfitrião. Leia o código QR novamente.",
       statusSignalingFailed: "⚠️ Falha ao conectar ao anfitrião! Reconecte-se.",
-      statusSignalingTimeout: "⚠️ A conexão com o anfitrião expirou. Reconecte-se.",
+      statusSignalingTimeout:
+        "⚠️ A conexão com o anfitrião expirou. Reconecte-se.",
       statusPeerDisconnected: "⚠️ Desconectado do anfitrião. Reconecte-se.",
     },
     ru: {
@@ -130,10 +143,14 @@
       reconnectButton: "Переподключиться",
       statusConnecting: "Подключение...",
       statusConnected: "📡 Подключено к хосту!",
-      statusRemoteDisconnected: "❌ Соединение с хостом разорвано. Отсканируйте QR-код ещё раз.",
-      statusSignalingFailed: "⚠️ Не удалось подключиться к хосту! Переподключитесь.",
-      statusSignalingTimeout: "⚠️ Время ожидания подключения к хосту истекло. Переподключитесь.",
-      statusPeerDisconnected: "⚠️ Соединение с хостом разорвано. Переподключитесь.",
+      statusRemoteDisconnected:
+        "❌ Соединение с хостом разорвано. Отсканируйте QR-код ещё раз.",
+      statusSignalingFailed:
+        "⚠️ Не удалось подключиться к хосту! Переподключитесь.",
+      statusSignalingTimeout:
+        "⚠️ Время ожидания подключения к хосту истекло. Переподключитесь.",
+      statusPeerDisconnected:
+        "⚠️ Соединение с хостом разорвано. Переподключитесь.",
     },
     ja: {
       welcomeCopy: "自分の言語のまま、面と向かって話せます。",
@@ -146,10 +163,14 @@
       reconnectButton: "再接続",
       statusConnecting: "接続中...",
       statusConnected: "📡 ホストと接続しました！",
-      statusRemoteDisconnected: "❌ ホストとの接続が切れました。もう一度QRコードを読み取ってください。",
-      statusSignalingFailed: "⚠️ ホストへの接続に失敗しました！再接続してください。",
-      statusSignalingTimeout: "⚠️ ホストへの接続がタイムアウトしました。再接続してください。",
-      statusPeerDisconnected: "⚠️ ホストとの接続が切れました。再接続してください。",
+      statusRemoteDisconnected:
+        "❌ ホストとの接続が切れました。もう一度QRコードを読み取ってください。",
+      statusSignalingFailed:
+        "⚠️ ホストへの接続に失敗しました！再接続してください。",
+      statusSignalingTimeout:
+        "⚠️ ホストへの接続がタイムアウトしました。再接続してください。",
+      statusPeerDisconnected:
+        "⚠️ ホストとの接続が切れました。再接続してください。",
     },
     fr: {
       welcomeCopy: "Parlez face à face dans votre propre langue.",
@@ -162,13 +183,18 @@
       reconnectButton: "Se reconnecter",
       statusConnecting: "Connexion...",
       statusConnected: "📡 Connecté à l'hôte !",
-      statusRemoteDisconnected: "❌ Déconnecté de l'hôte. Veuillez rescanner le code QR.",
-      statusSignalingFailed: "⚠️ Échec de la connexion à l'hôte ! Veuillez vous reconnecter.",
-      statusSignalingTimeout: "⚠️ Le délai de connexion à l'hôte a expiré. Veuillez vous reconnecter.",
-      statusPeerDisconnected: "⚠️ Déconnecté de l'hôte. Veuillez vous reconnecter.",
+      statusRemoteDisconnected:
+        "❌ Déconnecté de l'hôte. Veuillez rescanner le code QR.",
+      statusSignalingFailed:
+        "⚠️ Échec de la connexion à l'hôte ! Veuillez vous reconnecter.",
+      statusSignalingTimeout:
+        "⚠️ Le délai de connexion à l'hôte a expiré. Veuillez vous reconnecter.",
+      statusPeerDisconnected:
+        "⚠️ Déconnecté de l'hôte. Veuillez vous reconnecter.",
     },
     de: {
-      welcomeCopy: "Sprechen Sie von Angesicht zu Angesicht in Ihrer eigenen Sprache.",
+      welcomeCopy:
+        "Sprechen Sie von Angesicht zu Angesicht in Ihrer eigenen Sprache.",
       safetyItem1: "✨ Keine App erforderlich",
       safetyItem2: "👤 Keine Registrierung erforderlich",
       safetyItem3: "🔒 Sicher & privat",
@@ -178,10 +204,14 @@
       reconnectButton: "Erneut verbinden",
       statusConnecting: "Verbindung wird hergestellt...",
       statusConnected: "📡 Mit dem Host verbunden!",
-      statusRemoteDisconnected: "❌ Verbindung zum Host getrennt. Bitte scannen Sie den QR-Code erneut.",
-      statusSignalingFailed: "⚠️ Verbindung zum Host fehlgeschlagen! Bitte erneut verbinden.",
-      statusSignalingTimeout: "⚠️ Zeitüberschreitung bei der Verbindung zum Host. Bitte erneut verbinden.",
-      statusPeerDisconnected: "⚠️ Verbindung zum Host getrennt. Bitte erneut verbinden.",
+      statusRemoteDisconnected:
+        "❌ Verbindung zum Host getrennt. Bitte scannen Sie den QR-Code erneut.",
+      statusSignalingFailed:
+        "⚠️ Verbindung zum Host fehlgeschlagen! Bitte erneut verbinden.",
+      statusSignalingTimeout:
+        "⚠️ Zeitüberschreitung bei der Verbindung zum Host. Bitte erneut verbinden.",
+      statusPeerDisconnected:
+        "⚠️ Verbindung zum Host getrennt. Bitte erneut verbinden.",
     },
     ko: {
       welcomeCopy: "자신의 언어 그대로 얼굴을 마주 보고 대화하세요.",
@@ -194,10 +224,14 @@
       reconnectButton: "다시 연결",
       statusConnecting: "연결 중...",
       statusConnected: "📡 호스트와 연결되었습니다!",
-      statusRemoteDisconnected: "❌ 호스트와의 연결이 끊어졌습니다. QR 코드를 다시 스캔해주세요.",
-      statusSignalingFailed: "⚠️ 호스트에 연결하지 못했습니다! 다시 연결해주세요.",
-      statusSignalingTimeout: "⚠️ 호스트 연결 시간이 초과되었습니다. 다시 연결해주세요.",
-      statusPeerDisconnected: "⚠️ 호스트와의 연결이 끊어졌습니다. 다시 연결해주세요.",
+      statusRemoteDisconnected:
+        "❌ 호스트와의 연결이 끊어졌습니다. QR 코드를 다시 스캔해주세요.",
+      statusSignalingFailed:
+        "⚠️ 호스트에 연결하지 못했습니다! 다시 연결해주세요.",
+      statusSignalingTimeout:
+        "⚠️ 호스트 연결 시간이 초과되었습니다. 다시 연결해주세요.",
+      statusPeerDisconnected:
+        "⚠️ 호스트와의 연결이 끊어졌습니다. 다시 연결해주세요.",
     },
     vi: {
       welcomeCopy: "Trò chuyện trực tiếp bằng chính ngôn ngữ của bạn.",
@@ -210,10 +244,14 @@
       reconnectButton: "Kết nối lại",
       statusConnecting: "Đang kết nối...",
       statusConnected: "📡 Đã kết nối với máy chủ!",
-      statusRemoteDisconnected: "❌ Đã ngắt kết nối với máy chủ. Vui lòng quét lại mã QR.",
-      statusSignalingFailed: "⚠️ Kết nối với máy chủ thất bại! Vui lòng kết nối lại.",
-      statusSignalingTimeout: "⚠️ Kết nối với máy chủ đã hết thời gian chờ. Vui lòng kết nối lại.",
-      statusPeerDisconnected: "⚠️ Đã ngắt kết nối với máy chủ. Vui lòng kết nối lại.",
+      statusRemoteDisconnected:
+        "❌ Đã ngắt kết nối với máy chủ. Vui lòng quét lại mã QR.",
+      statusSignalingFailed:
+        "⚠️ Kết nối với máy chủ thất bại! Vui lòng kết nối lại.",
+      statusSignalingTimeout:
+        "⚠️ Kết nối với máy chủ đã hết thời gian chờ. Vui lòng kết nối lại.",
+      statusPeerDisconnected:
+        "⚠️ Đã ngắt kết nối với máy chủ. Vui lòng kết nối lại.",
     },
     it: {
       welcomeCopy: "Parla faccia a faccia nella tua lingua.",
@@ -226,8 +264,10 @@
       reconnectButton: "Riconnetti",
       statusConnecting: "Connessione in corso...",
       statusConnected: "📡 Connesso all'host!",
-      statusRemoteDisconnected: "❌ Disconnesso dall'host. Scansiona di nuovo il codice QR.",
-      statusSignalingFailed: "⚠️ Connessione all'host non riuscita! Riconnettiti.",
+      statusRemoteDisconnected:
+        "❌ Disconnesso dall'host. Scansiona di nuovo il codice QR.",
+      statusSignalingFailed:
+        "⚠️ Connessione all'host non riuscita! Riconnettiti.",
       statusSignalingTimeout: "⚠️ Connessione all'host scaduta. Riconnettiti.",
       statusPeerDisconnected: "⚠️ Disconnesso dall'host. Riconnettiti.",
     },
@@ -242,10 +282,14 @@
       reconnectButton: "เชื่อมต่อใหม่",
       statusConnecting: "กำลังเชื่อมต่อ...",
       statusConnected: "📡 เชื่อมต่อกับโฮสต์แล้ว!",
-      statusRemoteDisconnected: "❌ การเชื่อมต่อกับโฮสต์ถูกตัด กรุณาสแกน QR โค้ดอีกครั้ง",
-      statusSignalingFailed: "⚠️ เชื่อมต่อกับโฮสต์ไม่สำเร็จ! กรุณาเชื่อมต่อใหม่",
-      statusSignalingTimeout: "⚠️ การเชื่อมต่อกับโฮสต์หมดเวลา กรุณาเชื่อมต่อใหม่",
-      statusPeerDisconnected: "⚠️ การเชื่อมต่อกับโฮสต์ถูกตัด กรุณาเชื่อมต่อใหม่",
+      statusRemoteDisconnected:
+        "❌ การเชื่อมต่อกับโฮสต์ถูกตัด กรุณาสแกน QR โค้ดอีกครั้ง",
+      statusSignalingFailed:
+        "⚠️ เชื่อมต่อกับโฮสต์ไม่สำเร็จ! กรุณาเชื่อมต่อใหม่",
+      statusSignalingTimeout:
+        "⚠️ การเชื่อมต่อกับโฮสต์หมดเวลา กรุณาเชื่อมต่อใหม่",
+      statusPeerDisconnected:
+        "⚠️ การเชื่อมต่อกับโฮสต์ถูกตัด กรุณาเชื่อมต่อใหม่",
     },
   };
 
@@ -310,7 +354,6 @@
 
   function applyGuestUiLanguage() {
     const t = guestUiStrings();
-    welcomeCopyEl.textContent = t.welcomeCopy;
     safetyItem1El.textContent = t.safetyItem1;
     safetyItem2El.textContent = t.safetyItem2;
     safetyItem3El.textContent = t.safetyItem3;
