@@ -505,7 +505,8 @@
           );
         };
         sendGuestLang();
-        setTimeout(sendGuestLang, 1000);
+        setTimeout(sendGuestLang, 5000);
+        setTimeout(sendGuestLang, 10000); // さらに10秒後に再送して保険を厚くする
       };
       dataChannel.onclose = () => {
         console.log("🔌 データチャンネルが切断されました");
