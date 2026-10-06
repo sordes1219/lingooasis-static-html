@@ -53,6 +53,7 @@
       statusSignalingFailed: "⚠️ 连接主机失败！请重新连接。",
       statusSignalingTimeout: "⚠️ 连接主机超时。请重新连接。",
       statusPeerDisconnected: "⚠️ 与主机的连接已断开。请重新连接。",
+      sendButton: "发送",
     },
     es: {
       welcomeCopy: "Habla cara a cara en tu propio idioma.",
@@ -73,6 +74,7 @@
         "⚠️ La conexión con el anfitrión ha caducado. Vuelve a conectar.",
       statusPeerDisconnected:
         "⚠️ Desconectado del anfitrión. Vuelve a conectar.",
+      sendButton: "Enviar",
     },
     en: {
       welcomeCopy: "Talk face-to-face in your own language.",
@@ -93,6 +95,7 @@
         "⚠️ Connection to the host timed out. Please reconnect.",
       statusPeerDisconnected:
         "⚠️ Disconnected from the host. Please reconnect.",
+      sendButton: "Send",
     },
     hi: {
       welcomeCopy: "अपनी ही भाषा में आमने-सामने बात करें।",
@@ -113,6 +116,7 @@
         "⚠️ होस्ट से कनेक्शन का समय समाप्त हो गया। कृपया फिर से कनेक्ट करें।",
       statusPeerDisconnected:
         "⚠️ होस्ट से कनेक्शन टूट गया। कृपया फिर से कनेक्ट करें।",
+      sendButton: "भेजें",
     },
     pt: {
       welcomeCopy: "Converse cara a cara no seu próprio idioma.",
@@ -131,6 +135,7 @@
       statusSignalingTimeout:
         "⚠️ A conexão com o anfitrião expirou. Reconecte-se.",
       statusPeerDisconnected: "⚠️ Desconectado do anfitrião. Reconecte-se.",
+      sendButton: "Enviar",
     },
     ru: {
       welcomeCopy: "Общайтесь лицом к лицу на своём родном языке.",
@@ -151,6 +156,7 @@
         "⚠️ Время ожидания подключения к хосту истекло. Переподключитесь.",
       statusPeerDisconnected:
         "⚠️ Соединение с хостом разорвано. Переподключитесь.",
+      sendButton: "Отправить",
     },
     ja: {
       welcomeCopy: "自分の言語のまま、面と向かって話せます。",
@@ -171,6 +177,7 @@
         "⚠️ ホストへの接続がタイムアウトしました。再接続してください。",
       statusPeerDisconnected:
         "⚠️ ホストとの接続が切れました。再接続してください。",
+      sendButton: "送信",
     },
     fr: {
       welcomeCopy: "Parlez face à face dans votre propre langue.",
@@ -191,6 +198,7 @@
         "⚠️ Le délai de connexion à l'hôte a expiré. Veuillez vous reconnecter.",
       statusPeerDisconnected:
         "⚠️ Déconnecté de l'hôte. Veuillez vous reconnecter.",
+      sendButton: "Envoyer",
     },
     de: {
       welcomeCopy:
@@ -212,6 +220,7 @@
         "⚠️ Zeitüberschreitung bei der Verbindung zum Host. Bitte erneut verbinden.",
       statusPeerDisconnected:
         "⚠️ Verbindung zum Host getrennt. Bitte erneut verbinden.",
+      sendButton: "Senden",
     },
     ko: {
       welcomeCopy: "자신의 언어 그대로 얼굴을 마주 보고 대화하세요.",
@@ -232,6 +241,7 @@
         "⚠️ 호스트 연결 시간이 초과되었습니다. 다시 연결해주세요.",
       statusPeerDisconnected:
         "⚠️ 호스트와의 연결이 끊어졌습니다. 다시 연결해주세요.",
+      sendButton: "보내기",
     },
     vi: {
       welcomeCopy: "Trò chuyện trực tiếp bằng chính ngôn ngữ của bạn.",
@@ -252,6 +262,7 @@
         "⚠️ Kết nối với máy chủ đã hết thời gian chờ. Vui lòng kết nối lại.",
       statusPeerDisconnected:
         "⚠️ Đã ngắt kết nối với máy chủ. Vui lòng kết nối lại.",
+      sendButton: "Gửi",
     },
     it: {
       welcomeCopy: "Parla faccia a faccia nella tua lingua.",
@@ -270,6 +281,7 @@
         "⚠️ Connessione all'host non riuscita! Riconnettiti.",
       statusSignalingTimeout: "⚠️ Connessione all'host scaduta. Riconnettiti.",
       statusPeerDisconnected: "⚠️ Disconnesso dall'host. Riconnettiti.",
+      sendButton: "Invia",
     },
     th: {
       welcomeCopy: "พูดคุยแบบเห็นหน้ากันด้วยภาษาของคุณเอง",
@@ -290,6 +302,7 @@
         "⚠️ การเชื่อมต่อกับโฮสต์หมดเวลา กรุณาเชื่อมต่อใหม่",
       statusPeerDisconnected:
         "⚠️ การเชื่อมต่อกับโฮสต์ถูกตัด กรุณาเชื่อมต่อใหม่",
+      sendButton: "ส่ง",
     },
   };
 
@@ -361,6 +374,7 @@
     startButtonEl.textContent = t.startButton;
     inputEl.placeholder = t.inputPlaceholder;
     reconnectButtonEl.textContent = t.reconnectButton;
+    sendButtonEl.textContent = t.sendButton;
     renderConnectionState();
   }
 
