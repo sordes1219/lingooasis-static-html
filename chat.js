@@ -530,7 +530,19 @@
       dataChannel.onmessage = (event) => {
         console.log("📩 受信データ: " + event.data);
         const data = JSON.parse(event.data);
-        appendMessage(data.text, "received", data.original);
+        if (data.type === "chat") {
+          appendMessage(data.text, "received", data.original);
+        } else if (
+          data.type === "introduction-card" &&
+          data.direction === "host-to-guest"
+        ) {
+          window.renderIntroductionCard(
+            data.content,
+            currentGuestLanguage(),
+            messageInnerEl,
+            "received",
+          );
+        }
       };
     }
 
