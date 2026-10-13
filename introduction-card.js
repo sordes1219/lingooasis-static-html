@@ -15,6 +15,22 @@
     th: { title: "บัตรแนะนำตัว", save: "บันทึกในรายชื่อ", original: "ต้นฉบับ", translation: "คำแปล", name: "ชื่อ", nickname: "ชื่อเล่น", countryOfOrigin: "ประเทศต้นทาง", hobbies: "งานอดิเรก", personalEmail: "อีเมลส่วนตัว", personalPhone: "โทรศัพท์ส่วนตัว", company: "บริษัท / องค์กร", department: "แผนก", jobTitle: "ตำแหน่ง", workEmail: "อีเมลงาน", workPhone: "โทรศัพท์งาน", website: "เว็บไซต์ธุรกิจ", businessAddress: "ที่อยู่ธุรกิจ", socialProfiles: "โซเชียลโปรไฟล์" },
   };
 
+  const SAVE_STATUS_LABELS = {
+    zh: { shared: "联系人文件已共享。", downloaded: "联系人文件已下载，请打开文件并保存到通讯录。", failed: "无法保存联系人文件，请重试。" },
+    es: { shared: "Se compartió el archivo de contacto.", downloaded: "Se descargó el archivo. Ábrelo para guardarlo en tus contactos.", failed: "No se pudo guardar el archivo. Inténtalo de nuevo." },
+    en: { shared: "Contact file shared.", downloaded: "Contact file downloaded. Open it to save it to your contacts.", failed: "Could not save the contact file. Please try again." },
+    hi: { shared: "संपर्क फ़ाइल साझा की गई।", downloaded: "संपर्क फ़ाइल डाउनलोड हुई। इसे खोलकर संपर्कों में सहेजें।", failed: "संपर्क फ़ाइल सहेजी नहीं जा सकी। फिर से प्रयास करें।" },
+    pt: { shared: "Arquivo de contato compartilhado.", downloaded: "Arquivo baixado. Abra-o para salvar nos seus contatos.", failed: "Não foi possível salvar o arquivo. Tente novamente." },
+    ru: { shared: "Файл контакта передан.", downloaded: "Файл контакта скачан. Откройте его, чтобы сохранить контакт.", failed: "Не удалось сохранить файл контакта. Попробуйте ещё раз." },
+    ja: { shared: "連絡先ファイルを共有しました。", downloaded: "連絡先ファイルをダウンロードしました。開いて連絡先に保存してください。", failed: "連絡先ファイルを保存できませんでした。もう一度お試しください。" },
+    fr: { shared: "Fichier de contact partagé.", downloaded: "Fichier téléchargé. Ouvrez-le pour l’ajouter à vos contacts.", failed: "Impossible d’enregistrer le fichier. Réessayez." },
+    de: { shared: "Kontaktdatei geteilt.", downloaded: "Kontaktdatei heruntergeladen. Öffnen Sie sie, um den Kontakt zu speichern.", failed: "Die Kontaktdatei konnte nicht gespeichert werden. Bitte erneut versuchen." },
+    ko: { shared: "연락처 파일을 공유했습니다.", downloaded: "연락처 파일을 다운로드했습니다. 파일을 열어 연락처에 저장하세요.", failed: "연락처 파일을 저장하지 못했습니다. 다시 시도해 주세요." },
+    vi: { shared: "Đã chia sẻ tệp liên hệ.", downloaded: "Đã tải tệp liên hệ. Hãy mở tệp để lưu vào danh bạ.", failed: "Không thể lưu tệp liên hệ. Vui lòng thử lại." },
+    it: { shared: "File del contatto condiviso.", downloaded: "File scaricato. Aprilo per salvarlo nei contatti.", failed: "Impossibile salvare il file. Riprova." },
+    th: { shared: "แชร์ไฟล์รายชื่อแล้ว", downloaded: "ดาวน์โหลดไฟล์รายชื่อแล้ว เปิดไฟล์เพื่อบันทึกลงในรายชื่อ", failed: "บันทึกไฟล์รายชื่อไม่ได้ โปรดลองอีกครั้ง" },
+  };
+
   const escapeText = (value) =>
     String(value || "")
       .replace(/\\/g, "\\\\")
@@ -101,24 +117,61 @@
   }
 
   async function saveContact(content, labels, button) {
-    const card = makeVCard(content, labels);
-    const name = String(content.name || "contact").replace(/[\\/:*?"<>|]/g, "_");
-    const fileName = (name || "contact") + ".vcf";
-    const file = new File([card], fileName, { type: "text/vcard;charset=utf-8" });
+    const status = button.nextElementSibling;
+    button.disabled = true;
+    status.textContent = "";
     try {
-      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: labels.title });
-        return;
+      const card = makeVCard(content, labels);
+      const name = String(content.name || "contact").replace(/[\\/:*?"<>|]/g, "_");
+      const fileName = (name || "contact") + ".vcf";
+      let file = null;
+      try {
+        if (typeof File !== "undefined") {
+          file = new File([card], fileName, { type: "text/x-vcard" });
+        }
+      } catch {
+        // Fall back to downloading the vCard when File sharing is unavailable.
       }
+
+      let canShareFile = false;
+      try {
+        canShareFile = Boolean(
+          file &&
+            typeof navigator.share === "function" &&
+            typeof navigator.canShare === "function" &&
+            navigator.canShare({ files: [file] })
+        );
+      } catch {
+        // Fall back to downloading the vCard when file sharing is unavailable.
+      }
+
+      if (canShareFile) {
+        try {
+          await navigator.share({ files: [file], title: labels.title });
+          status.textContent = labels.shared;
+          return;
+        } catch (error) {
+          if (error && error.name === "AbortError") return;
+          status.textContent = labels.failed;
+          return;
+        }
+      }
+
+      const blob = new Blob([card], { type: "text/x-vcard" });
+      const objectUrl = URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.href = URL.createObjectURL(new Blob([card], { type: "text/vcard;charset=utf-8" }));
+      link.href = objectUrl;
       link.download = fileName;
+      link.style.display = "none";
+      document.body.appendChild(link);
       link.click();
-      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-    } catch (error) {
-      if (error && error.name === "AbortError") return;
-      button.textContent = labels.retry;
-      setTimeout(() => (button.textContent = labels.save), 2200);
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+      status.textContent = labels.downloaded;
+    } catch {
+      status.textContent = labels.failed;
+    } finally {
+      button.disabled = false;
     }
   }
 
@@ -162,8 +215,17 @@
     button.className = "contact-card-save";
     button.type = "button";
     button.textContent = labels.save;
-    button.addEventListener("click", () => void saveContact(content, { ...labels, retry: labels.retry || labels.save, title: labels.title }, button));
+    const status = document.createElement("div");
+    status.className = "contact-card-save-status";
+    status.setAttribute("role", "status");
+    status.setAttribute("aria-live", "polite");
+    const saveLabels = {
+      ...labels,
+      ...(SAVE_STATUS_LABELS[language] || SAVE_STATUS_LABELS.en),
+    };
+    button.addEventListener("click", () => void saveContact(content, saveLabels, button));
     bubble.appendChild(button);
+    bubble.appendChild(status);
     container.appendChild(bubble);
     container.parentElement.scrollTop = container.parentElement.scrollHeight;
   };
