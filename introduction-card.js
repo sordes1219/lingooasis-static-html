@@ -129,7 +129,8 @@
         if (typeof File !== "undefined") {
           file = new File([card], fileName, { type: "text/x-vcard" });
         }
-      } catch {
+      } catch (error) {
+        console.warn("[IntroductionCard] File creation failed; using download fallback", error);
         // Fall back to downloading the vCard when File sharing is unavailable.
       }
 
@@ -141,7 +142,8 @@
             typeof navigator.canShare === "function" &&
             navigator.canShare({ files: [file] })
         );
-      } catch {
+      } catch (error) {
+        console.warn("[IntroductionCard] File sharing capability check failed; using download fallback", error);
         // Fall back to downloading the vCard when file sharing is unavailable.
       }
 
@@ -152,6 +154,7 @@
           return;
         } catch (error) {
           if (error && error.name === "AbortError") return;
+          console.error("[IntroductionCard] navigator.share failed", error);
           status.textContent = labels.failed;
           return;
         }
@@ -168,7 +171,8 @@
       link.remove();
       setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
       status.textContent = labels.downloaded;
-    } catch {
+    } catch (error) {
+      console.error("[IntroductionCard] Contact file creation or download failed", error);
       status.textContent = labels.failed;
     } finally {
       button.disabled = false;
