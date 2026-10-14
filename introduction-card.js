@@ -56,12 +56,15 @@
   }
 
   function makeVCard(content, labels) {
-    const lines = ["BEGIN:VCARD", "VERSION:4.0"];
+    const lines = ["BEGIN:VCARD", "VERSION:3.0"];
     const has = (field) => content.includedFields.includes(field);
     const add = (key, value) => {
       if (value) lines.push(key + ":" + escapeText(value));
     };
-    if (has("name")) add("FN", content.name);
+    if (has("name")) {
+      add("FN", content.name);
+      if (content.name) lines.push("N:" + escapeText(content.name) + ";;;;");
+    }
     if (has("nickname")) add("NICKNAME", content.nickname);
     if (has("personalEmail")) add("EMAIL;TYPE=HOME,INTERNET", content.personalEmail);
     if (has("workEmail")) add("EMAIL;TYPE=WORK,INTERNET", content.workEmail);
@@ -128,7 +131,7 @@
       let file = null;
       try {
         if (typeof File !== "undefined") {
-          file = new File([card], fileName, { type: "text/x-vcard" });
+          file = new File([card], fileName, { type: "text/vcard;charset=utf-8" });
         }
       } catch (error) {
         console.warn("[IntroductionCard] File creation failed; using download fallback", error);
@@ -158,7 +161,7 @@
         }
       }
 
-      const blob = new Blob([card], { type: "text/x-vcard" });
+      const blob = new Blob([card], { type: "text/vcard;charset=utf-8" });
       const objectUrl = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = objectUrl;
