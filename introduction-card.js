@@ -131,7 +131,7 @@
       let file = null;
       try {
         if (typeof File !== "undefined") {
-          file = new File([card], fileName, { type: "text/vcard;charset=utf-8" });
+          file = new File([card], fileName, { type: "text/x-vcard" });
         }
       } catch (error) {
         console.warn("[IntroductionCard] File creation failed; using download fallback", error);
@@ -161,7 +161,7 @@
         }
       }
 
-      const blob = new Blob([card], { type: "text/vcard;charset=utf-8" });
+      const blob = new Blob([card], { type: "text/x-vcard" });
       const objectUrl = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = objectUrl;
