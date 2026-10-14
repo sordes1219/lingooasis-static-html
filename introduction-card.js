@@ -98,9 +98,10 @@
         const url = safeUrl(item.url);
         const service = String(item.service || "social").replace(/[^A-Za-z0-9-]/g, "") || "social";
         if (url) {
-          lines.push("SOCIALPROFILE;TYPE=" + service + ";VALUE=uri:" + url);
+          lines.push("SOCIALPROFILE;SERVICE-TYPE=" + service + ":" + url);
+          lines.push("URL:" + url);
         } else if (item.username) {
-          lines.push("SOCIALPROFILE;TYPE=" + service + ";VALUE=text:" + escapeText(item.username));
+          lines.push("SOCIALPROFILE;SERVICE-TYPE=" + service + ";VALUE=text:" + escapeText(item.username));
         }
       });
     }
@@ -154,7 +155,6 @@
           return;
         } catch (error) {
           if (error && error.name === "AbortError") return;
-          console.warn("[IntroductionCard] navigator.share failed; using download fallback", error);
         }
       }
 
@@ -225,26 +225,7 @@
       ...labels,
       ...(SAVE_STATUS_LABELS[language] || SAVE_STATUS_LABELS.en),
     };
-    button.addEventListener("click", () => {
-      let webShareAllowed = "unavailable";
-      try {
-        const featurePolicy = document.featurePolicy;
-        if (featurePolicy && typeof featurePolicy.allowsFeature === "function") {
-          webShareAllowed = featurePolicy.allowsFeature("web-share");
-        }
-      } catch (error) {
-        webShareAllowed = "check-failed";
-        console.warn("[IntroductionCard] Could not inspect web-share policy", error);
-      }
-      console.warn("[IntroductionCard] Share diagnostics", {
-        topLevel: window.top === window.self,
-        webShareAllowed,
-        userActivation: navigator.userActivation
-          ? navigator.userActivation.isActive
-          : "unavailable",
-      });
-      void saveContact(content, saveLabels, button);
-    });
+    button.addEventListener("click", () => void saveContact(content, saveLabels, button));
     bubble.appendChild(button);
     bubble.appendChild(status);
     container.appendChild(bubble);
