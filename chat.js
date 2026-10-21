@@ -456,16 +456,54 @@
     el.className = "bubble " + type;
     const main = document.createElement("div");
     main.className = "bubble-main";
-    main.textContent = text;
+    appendLinkedText(main, text);
     el.appendChild(main);
     if (subText) {
       const sub = document.createElement("div");
       sub.className = "bubble-sub";
-      sub.textContent = subText;
+      appendLinkedText(sub, subText);
       el.appendChild(sub);
     }
     messageInnerEl.appendChild(el);
     scrollMessagesToBottom();
+  }
+
+  function appendLinkedText(container, value) {
+    const urlPattern = /https?:\/\/[^\s<>"'`]+/gi;
+    let cursor = 0;
+    let match;
+
+    while ((match = urlPattern.exec(value)) !== null) {
+      let url = match[0];
+      while (/[.,!?;:。、，；：！？]$/.test(url)) {
+        url = url.slice(0, -1);
+      }
+      for (const [closer, opener] of [[")", "("], ["]", "["], ["}", "{"]]) {
+        while (
+          url.endsWith(closer) &&
+          (url.split(closer).length - 1) > (url.split(opener).length - 1)
+        ) {
+          url = url.slice(0, -1);
+        }
+      }
+
+      if (!/^https?:\/\/[^\s/?#]+/i.test(url)) continue;
+      const start = match.index;
+      if (start > cursor) {
+        container.appendChild(document.createTextNode(value.slice(cursor, start)));
+      }
+      const link = document.createElement("a");
+      link.href = url;
+      link.textContent = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      container.appendChild(link);
+      cursor = start + url.length;
+    }
+
+    if (cursor < value.length) {
+      container.appendChild(document.createTextNode(value.slice(cursor)));
+    }
   }
 
   function startChat() {
