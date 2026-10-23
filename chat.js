@@ -387,15 +387,20 @@
   }
 
   function updateKeyboardInset() {
-    if (!window.visualViewport) return;
+    const viewport = window.visualViewport;
+    if (!viewport) return;
     const shouldStickToBottom = isNearBottom();
     const inset = Math.max(
       0,
-      window.innerHeight - window.visualViewport.height,
+      window.innerHeight - viewport.offsetTop - viewport.height,
     );
     document.documentElement.style.setProperty(
       "--keyboard-bottom-inset",
       inset + "px",
+    );
+    document.documentElement.style.setProperty(
+      "--visual-viewport-top",
+      viewport.offsetTop + "px",
     );
     updateLayoutHeights();
     if (shouldStickToBottom) scrollMessagesToBottom();
@@ -444,6 +449,7 @@
 
   if (window.visualViewport) {
     window.visualViewport.addEventListener("resize", updateKeyboardInset);
+    window.visualViewport.addEventListener("scroll", updateKeyboardInset);
   }
   window.addEventListener("resize", updateLayoutHeights);
   inputEl.addEventListener("focus", updateKeyboardInset);

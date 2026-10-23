@@ -10,6 +10,7 @@
     <style>
       :root {
         --keyboard-bottom-inset: 0px;
+        --visual-viewport-top: 0px;
         --form-height: 72px;
         --viewport-height: 100dvh;
         --sky: #38bdf8;
@@ -135,6 +136,7 @@
         top: 0;
         left: 0;
         right: 0;
+        transform: translateY(var(--visual-viewport-top));
         height: calc(var(--viewport-height) - var(--form-height));
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
@@ -263,7 +265,7 @@
         padding: 10px 14px;
         border: 1px solid var(--border);
         border-radius: 999px;
-        font-size: 14px;
+        font-size: 16px;
         outline: none;
         color: var(--text);
       }
